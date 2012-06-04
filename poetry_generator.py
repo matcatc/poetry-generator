@@ -29,6 +29,29 @@ cannon_name = {}
 grammar_list = {}
 
 
+
+def program_arguments():
+    '''
+    TODO: cleanup/format
+    '''
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Generate some poetry.')
+
+    parser.add_argument('template', type=str, action='store', help='template to use for poetry generation')
+    
+    parser.add_argument('--repetitions', '-n', dest='number_repetitions', action='store', default=1, type=int, help='Number of times to repeat the template.')
+
+    parser.add_argument('--seed', '-s', action='store', type=int, default=None, help='seed to use for random number generator')
+
+    parser.add_argument('--output', '-o', action='store', type=str, default=None, help='output file name. Defaults to stdout.')
+
+    parser.add_argument('--verbose', '-v', action='store_true', default=False, help='enable verbose output')
+
+    args = parser.parse_args()
+    return args
+
+
 def get_cannonical_name(grammar_name):
     '''
     Retrieves the cannoncial name for the specified grammar name.
@@ -118,25 +141,43 @@ def main():
     '''
     global cannon_name, grammar_dict
 
-    print('DEBUG: populating data')
-    cannon_name = create_cannonical_name_dict('cannonicalization.config')
+    args = program_arguments()
 
-    print('DEBUG: cannon_name = %r' % cannon_name)
+    if args.verbose:
+        print('populating data')
+
+    cannon_name = create_cannonical_name_dict('cannonicalization.config')
 
     grammar_dict = create_grammar_dict(set(cannon_name.values()))
 
-    template = input('template: ')
+    if args.template == '-':
+        template = sys.stdin.read()
+    else:
+        template = args.template
 
-    print("DEBUG: template = %r" % template)
+    random.seed(args.seed)
+
+    if args.verbose:
+        print("template = %s" % template)
+        print("number repetitions = %s" % args.number_repetitions)
+        print("seed = %s" % args.seed)
 
     output = ''
-    for line in template.splitlines():
-        for word in line.split():
-            output = '%s %s' % (output, random_word(word))
-        output = '%s\n' % output
+    # generate from template `number_repetitions` times
+    for i in range(0, args.number_repetitions):
+        # generate "poetry" for given template
+        for line in template.splitlines():
+            for word in line.split():
+                output = '%s%s ' % (output, random_word(word))
+            output = output.strip(' ')
+            output = '%s\n' % output
     output = output.strip()
 
-    print("DEBUG: output = %r" % output)
+    if args.output is None:
+        print(output)
+    else:
+        with open(args.output, 'w') as output_file:
+            output_file.write(output)
 
 
 if __name__ == '__main__':
