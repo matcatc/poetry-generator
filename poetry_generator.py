@@ -168,7 +168,11 @@ def main():
         # generate "poetry" for given template
         for line in template.splitlines():
             for word in line.split():
-                output = '%s%s ' % (output, random_word(word))
+                if word == r'\n':
+                    rand_word = '\n'
+                else:
+                    rand_word = random_word(word)
+                output = '%s%s ' % (output, rand_word)
             output = output.strip(' ')
             output = '%s\n' % output
     output = output.strip()
