@@ -1,0 +1,27 @@
+README
+======
+:author: Matthew Todd
+:date: Jun 3, 2012
+
+Poetry generator (poetry_generator.py) is a small simple script to generate
+"poetry" given a template.
+
+The general algorithm is that for every category-word in the template, it
+replaces it with a word in that category. For example, 'noun verb adj noun'
+might be turned into 'dog sees angry cat'.
+
+A utility script (generate_wordlists.py) has been included to help with
+generating the wordlists. It (currently) reads in all the words from a file
+(eg: /usr/share/dict/words), classifies them by category, and places them in
+the appropriate file. It currently uses wordnet to do this, so wordnet is
+obviously a requirement. Running it over /usr/share/dict/words (approx 100,000
+words) took somewhere between 5 - 10 minutes on my computer. I've placed the
+resultant wordlists in sample_wordlists, so that you don't need to do all this
+work.
+
+The project currently can stand some clean up, and I will likely do so
+eventually. Never the less, it currently works right now. So get to it:
+
+........
+./poetry_generator.py 'noun verb adj noun' -n 5
+........
