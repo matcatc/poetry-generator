@@ -7,6 +7,7 @@ word lists.
 
 TODO: program options (later)
     specify master_wordlist
+    quiet/verbose option
 
 @author Matthew Todd
 @date Jun 2, 2012
@@ -15,8 +16,8 @@ TODO: program options (later)
 import re
 import subprocess
 
-#master_wordlist = '/usr/share/dict/words'
-master_wordlist = './test_words'
+master_wordlist = '/usr/share/dict/words'
+#master_wordlist = './test_words'
 
 class MyDict:
     '''
@@ -69,6 +70,7 @@ def build_dict():
     were present in the master list.)
     '''
     cat_dictionary = MyDict()
+    word_count = 0
 
     with open(master_wordlist, 'r') as wordlist:
         for word in wordlist:
@@ -76,6 +78,12 @@ def build_dict():
 
             for category in get_categories(word):
                 cat_dictionary[category].append(word)
+
+            word_count += 1
+            # TODO: quiet/verbose option
+            print('words processed: %s\r' % word_count, end='')
+
+    print('words processed: %s' % word_count)
 
     return cat_dictionary
 
