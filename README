@@ -25,3 +25,9 @@ eventually. Never the less, it currently works right now. So get to it:
 ........
 ./poetry_generator.py 'noun verb adj noun' -n 5
 ........
+
+
+License
+-------
+
+This project is licensed under GNU GPL v.3. See COPYING for more details.
